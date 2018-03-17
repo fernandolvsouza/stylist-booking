@@ -1,4 +1,4 @@
-package com.fernandovalente.services.resources;
+package com.fernandovalente.services.controller;
 
 import com.fernandovalente.services.model.Booking;
 import com.fernandovalente.services.model.BookingRequest;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -21,7 +22,7 @@ public class StylistBookingController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Booking bookStylist(@RequestBody BookingRequest bookingRequest) {
+    public Booking bookStylist(@RequestBody @Valid BookingRequest bookingRequest) {
         return service.book(bookingRequest.getCustomer(), bookingRequest.getTimeSlots());
     }
 

@@ -1,4 +1,4 @@
-package com.fernandovalente.services.resources;
+package com.fernandovalente.services.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
