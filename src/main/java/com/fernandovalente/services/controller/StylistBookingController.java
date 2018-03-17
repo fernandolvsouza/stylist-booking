@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(path = "/api/v1/stylist-booking")
@@ -28,7 +27,7 @@ public class StylistBookingController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Booking> getStylistBookingList() {
+    public Iterable<Booking> getStylistBookingList() {
         return service.getAllStylistBooking();
     }
 }

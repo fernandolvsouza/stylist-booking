@@ -4,13 +4,27 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.lang.NonNull;
 
+import javax.persistence.*;
 import java.util.Set;
 
+@Entity
 public class Booking {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
 
+    @OneToOne
     private Stylist stylist;
+
+    @OneToMany
     private Set<TimeSlot> timeSlots;
+
+    @OneToOne
     private Customer customer;
+
+    // no args constructor required by JAP SPEC
+    protected Booking() {
+    }
 
     @JsonCreator
     public Booking(@NonNull @JsonProperty("stylist") Stylist stylist, @NonNull @JsonProperty("timeSlots")
