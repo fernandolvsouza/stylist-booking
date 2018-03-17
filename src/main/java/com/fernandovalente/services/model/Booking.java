@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 public class Booking {
@@ -16,8 +15,8 @@ public class Booking {
     @OneToOne
     private Stylist stylist;
 
-    @OneToMany
-    private Set<TimeSlot> timeSlots;
+    @OneToOne
+    private TimeSlot timeSlot;
 
     @OneToOne
     private Customer customer;
@@ -27,10 +26,10 @@ public class Booking {
     }
 
     @JsonCreator
-    public Booking(@NonNull @JsonProperty("stylist") Stylist stylist, @NonNull @JsonProperty("timeSlots")
-            Set<TimeSlot> timeSlots, @NonNull @JsonProperty("customer") Customer customer) {
+    public Booking(@NonNull @JsonProperty("stylist") Stylist stylist, @NonNull @JsonProperty("timeSlot")
+            TimeSlot timeSlot, @NonNull @JsonProperty("customer") Customer customer) {
         this.stylist = stylist;
-        this.timeSlots = timeSlots;
+        this.timeSlot = timeSlot;
         this.customer = customer;
     }
 
@@ -40,8 +39,8 @@ public class Booking {
     }
 
     @NonNull
-    public Set<TimeSlot> getTimeSlots() {
-        return timeSlots;
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 
     @NonNull
@@ -56,15 +55,17 @@ public class Booking {
 
         Booking booking = (Booking) o;
 
+        if (!id.equals(booking.id)) return false;
         if (!stylist.equals(booking.stylist)) return false;
-        if (!timeSlots.equals(booking.timeSlots)) return false;
+        if (!timeSlot.equals(booking.timeSlot)) return false;
         return customer.equals(booking.customer);
     }
 
     @Override
     public int hashCode() {
-        int result = stylist.hashCode();
-        result = 31 * result + timeSlots.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + stylist.hashCode();
+        result = 31 * result + timeSlot.hashCode();
         result = 31 * result + customer.hashCode();
         return result;
     }

@@ -1,9 +1,6 @@
-package com.fernandovalente.services.integration;
+package com.fernandovalente.services.rest;
 
 import com.fernandovalente.services.model.*;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,27 +31,22 @@ public class StylistBookingControllerTest {
     private static final String BASE_TEST_URL = "http://localhost";
     private static final String STYLIST_BOOKING_PATH = "/api/v1/stylist-booking";
 
-    @Test
-    public void shouldHaveHelloWordInHome() throws Exception {
-        assertThat(this.restTemplate.getForObject(BASE_TEST_URL + ":" + port + "/",
-                String.class)).contains("Hello World");
-    }
 
     @Test
-    public void shouldCreateBookingAndReturnIt() throws Exception {
-        final TimeSlot timeSlot = new TimeSlot(0, LocalDate.now());
-        final Set<TimeSlot> timeSlots = ImmutableSet.of(timeSlot);
-        final Customer customer = new Customer("Customer 1");
-        final BookingRequest bookingRequest = new BookingRequest(timeSlots, customer);
-
-        final Booking expectedBooking = new Booking(new Stylist("chosen stylist"), timeSlots, customer);
+    public void shouldCreateBookingAndReturnIt() {
+        final TimeSlot expetedTimeSlot = new TimeSlot(0, LocalDate.now());
+        final Customer expectedCustomer = new Customer("Customer 1");
+        final BookingRequest bookingRequest = new BookingRequest(expetedTimeSlot, expectedCustomer);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<BookingRequest> entity = new HttpEntity<>(bookingRequest, headers);
-        assertThat(this.restTemplate.postForEntity(BASE_TEST_URL + ":" + port + STYLIST_BOOKING_PATH, entity,
-                Booking.class).getBody()).isEqualToComparingFieldByFieldRecursively(expectedBooking);
+        Booking actualBooking = this.restTemplate.postForEntity(BASE_TEST_URL + ":" + port + STYLIST_BOOKING_PATH, entity,
+                Booking.class).getBody();
+        assertThat(actualBooking.getCustomer()).isEqualToComparingFieldByFieldRecursively(expectedCustomer);
+        assertThat(actualBooking.getTimeSlot()).isEqualToComparingFieldByFieldRecursively(expetedTimeSlot);
+
     }
 
     @Test
@@ -64,9 +55,8 @@ public class StylistBookingControllerTest {
         timeSlot.put("daySlot", 0);
         timeSlot.put("day", "2018-03-17");
 
-        final JSONArray timeSlots = new JSONArray(ImmutableList.of(timeSlot));
         final JSONObject noCustomer = new JSONObject();
-        noCustomer.put("timeSlots", timeSlots);
+        noCustomer.put("timeSlot", timeSlot);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -79,21 +69,20 @@ public class StylistBookingControllerTest {
     }
 
     @Test
-    public void shouldShouldReturn400WhenThereAreNotTimeSlots() throws Exception {
+    public void shouldShouldReturn400WhenThereAreNotTimeSlot() throws Exception {
         final JSONObject customer = new JSONObject();
         customer.put("name", "Name");
 
-        final JSONObject noCustomer = new JSONObject();
-        noCustomer.put("customer", customer);
+        final JSONObject noTimeSlot = new JSONObject();
+        noTimeSlot.put("customer", customer);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        System.out.println(noCustomer.toString());
+        System.out.println(noTimeSlot.toString());
 
-        HttpEntity<String> entity = new HttpEntity<>(noCustomer.toString(), headers);
+        HttpEntity<String> entity = new HttpEntity<>(noTimeSlot.toString(), headers);
         assertThat(this.restTemplate.postForEntity(BASE_TEST_URL + ":" + port + STYLIST_BOOKING_PATH, entity,
                 Booking.class).getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
-
 }

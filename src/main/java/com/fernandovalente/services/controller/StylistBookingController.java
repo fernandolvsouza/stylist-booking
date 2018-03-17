@@ -22,12 +22,12 @@ public class StylistBookingController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public Booking bookStylist(@RequestBody @Valid BookingRequest bookingRequest) {
-        return service.book(bookingRequest.getCustomer(), bookingRequest.getTimeSlots());
+        return service.book(bookingRequest.getCustomer(), bookingRequest.getTimeSlot());
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Booking> getStylistBookingList() {
-        return service.getAllStylistBooking();
+    public Iterable<Booking> getStylistBookings() {
+        return service.getAllBookings();
     }
 }

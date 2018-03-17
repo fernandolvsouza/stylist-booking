@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 public class BookingRequest {
-    private Set<TimeSlot> timeSlots;
+    private TimeSlot timeSlot;
     private Customer customer;
 
     @JsonCreator
-    public BookingRequest(@NotNull @NotEmpty @JsonProperty("timeSlots") Set<TimeSlot> timeSlots, @NotNull @JsonProperty("customer") Customer customer) {
-        this.timeSlots = timeSlots;
+    public BookingRequest(@NotNull @NotEmpty @JsonProperty("timeSlot") TimeSlot timeSlot,
+                          @NotNull @JsonProperty("customer") Customer customer) {
+        this.timeSlot = timeSlot;
         this.customer = customer;
     }
 
@@ -22,8 +22,8 @@ public class BookingRequest {
         return customer;
     }
 
-    @NotNull @NotEmpty
-    public Set<TimeSlot> getTimeSlots() {
-        return timeSlots;
+    @NotNull
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 }

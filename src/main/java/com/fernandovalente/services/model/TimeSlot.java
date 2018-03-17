@@ -14,15 +14,22 @@ import java.time.LocalDate;
 
 @Entity
 public class TimeSlot {
+
+    public final static int MAX_TIME_SLOT_PER_DAY = 16;
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+
+    // no args constructor required by JAP SPEC
+    protected TimeSlot() {
+    }
 
     private int daySlot;
     private LocalDate day;
 
     @JsonCreator
-    public TimeSlot(@Min(0) @Max(15) @JsonProperty("daySlot") Integer daySlot, @NonNull @JsonProperty("day") LocalDate day) {
+    public TimeSlot(@Min(0) @Max(MAX_TIME_SLOT_PER_DAY - 1) @JsonProperty("daySlot") Integer daySlot, @NonNull @JsonProperty("day") LocalDate day) {
         this.daySlot = daySlot;
         this.day = day;
     }

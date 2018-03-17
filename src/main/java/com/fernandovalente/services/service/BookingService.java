@@ -10,33 +10,33 @@ import com.fernandovalente.services.repository.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Component
 public class BookingService {
-    @Autowired
+
     private StylistAvailabilityService stylistAvailabilityService;
-
-    @Autowired
     private BookingRepository bookingRepository;
-
-    @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
     private TimeSlotRepository timeSlotRepository;
 
-    public Booking book(Customer customer, Set<TimeSlot> timeSlots) {
-        Stylist stylist = stylistAvailabilityService.findAvailableStylist(timeSlots);
-        timeSlots.forEach((timeSlot -> timeSlotRepository.save(timeSlot)));
+    @Autowired
+    public BookingService(StylistAvailabilityService stylistAvailabilityService, BookingRepository bookingRepository,
+                          CustomerRepository customerRepository, TimeSlotRepository timeSlotRepository) {
+        this.stylistAvailabilityService = stylistAvailabilityService;
+        this.bookingRepository = bookingRepository;
+        this.customerRepository = customerRepository;
+        this.timeSlotRepository = timeSlotRepository;
+    }
+
+    public Booking book(Customer customer, TimeSlot timeSlot) {
+        Stylist stylist = stylistAvailabilityService.findAvailableStylist(timeSlot);
+        timeSlotRepository.save(timeSlot);
         customerRepository.save(customer);
         // TODO avoid overbooking
-        Booking booking = new Booking(stylist, timeSlots, customer);
-
+        Booking booking = new Booking(stylist, timeSlot, customer);
         return bookingRepository.save(booking);
     }
 
-    public Iterable<Booking> getAllStylistBooking() {
+    public Iterable<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 }
