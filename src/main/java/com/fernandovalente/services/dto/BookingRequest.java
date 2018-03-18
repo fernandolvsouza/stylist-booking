@@ -1,7 +1,8 @@
-package com.fernandovalente.services.model;
+package com.fernandovalente.services.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fernandovalente.services.model.TimeSlot;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

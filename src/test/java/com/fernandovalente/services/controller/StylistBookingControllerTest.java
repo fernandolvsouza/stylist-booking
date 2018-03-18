@@ -1,5 +1,6 @@
 package com.fernandovalente.services.controller;
 
+import com.fernandovalente.services.dto.BookingRequest;
 import com.fernandovalente.services.helper.CustomerTestHelper;
 import com.fernandovalente.services.helper.StylistLifeCycleTestHelper;
 import com.fernandovalente.services.model.*;
@@ -36,12 +37,11 @@ public class StylistBookingControllerTest {
     private static final String STYLIST_BOOKING_PATH = "/api/v1/stylist-booking";
 
     private CustomerTestHelper customerTestHelper;
-    private StylistLifeCycleTestHelper stylistLifeCycleTestHelper;
 
     @Before
     public void before() {
         customerTestHelper = new CustomerTestHelper(port, restTemplate);
-        stylistLifeCycleTestHelper = new StylistLifeCycleTestHelper(port, restTemplate);
+        StylistLifeCycleTestHelper stylistLifeCycleTestHelper = new StylistLifeCycleTestHelper(port, restTemplate);
         stylistLifeCycleTestHelper.createStylist("Stylist name");
     }
 
@@ -55,8 +55,8 @@ public class StylistBookingControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<BookingRequest> entity = new HttpEntity<>(bookingRequest, headers);
-        Booking actualBooking = this.restTemplate.postForEntity(BASE_TEST_URL + ":" + port + STYLIST_BOOKING_PATH, entity,
-                Booking.class).getBody();
+        Booking actualBooking = this.restTemplate.postForEntity(BASE_TEST_URL + ":" + port + STYLIST_BOOKING_PATH,
+                entity, Booking.class).getBody();
         assertThat(actualBooking.getCustomer()).isEqualToComparingFieldByFieldRecursively(createdCustomer);
         assertThat(actualBooking.getTimeSlot()).isEqualToComparingFieldByFieldRecursively(expectedTimeSlot);
     }

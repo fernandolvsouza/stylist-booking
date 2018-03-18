@@ -1,9 +1,6 @@
 package com.fernandovalente.services.repository;
 
-import com.fernandovalente.services.model.Booking;
-import com.fernandovalente.services.model.Customer;
-import com.fernandovalente.services.model.Stylist;
-import com.fernandovalente.services.model.TimeSlot;
+import com.fernandovalente.services.model.*;
 import com.fernandovalente.services.service.TimeSlotCalculatorService;
 import org.javatuples.Pair;
 import org.junit.Test;
@@ -43,7 +40,7 @@ public class TimeSlotRepositoryTest {
         LocalDate from = LocalDate.now();
         LocalDate to = from.plusDays(2);
 
-        Stylist firstStylist = new Stylist("first Stylist");
+        Stylist firstStylist = new Stylist("first Stylist", StylistState.READY);
         stylistRepository.save(firstStylist);
 
         List<Object[]> totallyBooked = timeSlotRepository.findTimeSlotsTotallyBooked(from, to);
@@ -60,7 +57,7 @@ public class TimeSlotRepositoryTest {
         Customer customer = new Customer("Only one customer");
         customerRepository.save(customer);
 
-        Stylist firstStylist = new Stylist("first Stylist");
+        Stylist firstStylist = new Stylist("first Stylist", StylistState.READY);
         stylistRepository.save(firstStylist);
 
         for (int slot = 0; slot < TimeSlot.MAX_TIME_SLOT_PER_DAY; slot++) {
@@ -89,10 +86,10 @@ public class TimeSlotRepositoryTest {
         Customer customer = new Customer("Only one customer");
         customerRepository.save(customer);
 
-        Stylist firstStylist = new Stylist("first Stylist");
+        Stylist firstStylist = new Stylist("first Stylist", StylistState.READY);
         stylistRepository.save(firstStylist);
 
-        Stylist secondStylist = new Stylist("second Stylist");
+        Stylist secondStylist = new Stylist("second Stylist", StylistState.READY);
         stylistRepository.save(secondStylist);
 
         for (int slot = 0; slot < TimeSlot.MAX_TIME_SLOT_PER_DAY; slot++) {
@@ -121,10 +118,10 @@ public class TimeSlotRepositoryTest {
         Customer customer = new Customer("Only one customer");
         customerRepository.save(customer);
 
-        Stylist firstStylist = new Stylist("first Stylist");
+        Stylist firstStylist = new Stylist("first Stylist", StylistState.READY);
         stylistRepository.save(firstStylist);
 
-        Stylist secondStylist = new Stylist("second Stylist");
+        Stylist secondStylist = new Stylist("second Stylist", StylistState.READY);
         stylistRepository.save(secondStylist);
 
         for (int slot = 0; slot < TimeSlot.MAX_TIME_SLOT_PER_DAY; slot++) {

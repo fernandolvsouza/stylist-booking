@@ -38,9 +38,6 @@ public class StylistAvailabilityControllerTest {
     private CustomerTestHelper customerTestHelper;
     private StylistLifeCycleTestHelper stylistLifeCycleTestHelper;
 
-    private Stylist firstStylist;
-    private Stylist secondStylist;
-
     @Before
     public void before() {
         bookingTestHelper = new BookingTestHelper(port, restTemplate);
@@ -67,7 +64,7 @@ public class StylistAvailabilityControllerTest {
         ResponseEntity<TimeSlot[]> entity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
                 STYLIST_AVAILABILITY_PATH + "?fromInclusive=2018-03-19&toInclusive=2018-03-19", TimeSlot[].class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(entity.getBody()).hasSize(16);
+        assertThat(entity.getBody()).hasSize(TimeSlot.MAX_TIME_SLOT_PER_DAY);
     }
 
     @Test
@@ -75,29 +72,29 @@ public class StylistAvailabilityControllerTest {
         ResponseEntity<TimeSlot[]> entity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
                 STYLIST_AVAILABILITY_PATH + "?fromInclusive=2018-03-19&toInclusive=2018-03-20", TimeSlot[].class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(entity.getBody()).hasSize(32);
+        assertThat(entity.getBody()).hasSize(TimeSlot.MAX_TIME_SLOT_PER_DAY * 2);
     }
 
     @Test
     public void shouldReturnAvailableSlotsProperly() throws JSONException {
-        String today = "2018-03-17";
-        firstStylist = stylistLifeCycleTestHelper.createStylist("first Stylist");
+        final String today = "2018-03-17";
+        stylistLifeCycleTestHelper.createStylist("first Stylist");
         Customer customer = customerTestHelper.createCustomer("Batch costumer");
         for (int index = 0; index < 8; index++) {
             bookingTestHelper.bookSlot(LocalDate.parse(today), index, customer.getId());
         }
 
-        ResponseEntity<TimeSlot[]> entity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
-                STYLIST_AVAILABILITY_PATH + "?fromInclusive="+ today + "&toInclusive="+ today, TimeSlot[].class);
+        final ResponseEntity<TimeSlot[]> entity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
+                STYLIST_AVAILABILITY_PATH + "?fromInclusive=" + today + "&toInclusive=" + today, TimeSlot[].class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(entity.getBody()).hasSize(8);
+        assertThat(entity.getBody()).hasSize(TimeSlot.MAX_TIME_SLOT_PER_DAY / 2);
 
-        secondStylist = stylistLifeCycleTestHelper.createStylist("second Stylist");
+        stylistLifeCycleTestHelper.createStylist("second Stylist");
 
-        ResponseEntity<TimeSlot[]> secondsEntity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
-                STYLIST_AVAILABILITY_PATH + "?fromInclusive="+ today + "&toInclusive="+ today, TimeSlot[].class);
+        final ResponseEntity<TimeSlot[]> secondsEntity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
+                STYLIST_AVAILABILITY_PATH + "?fromInclusive=" + today + "&toInclusive=" + today, TimeSlot[].class);
         assertThat(secondsEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(secondsEntity.getBody()).hasSize(16);
+        assertThat(secondsEntity.getBody()).hasSize(TimeSlot.MAX_TIME_SLOT_PER_DAY);
 
     }
 }

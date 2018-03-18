@@ -3,10 +3,11 @@ package com.fernandovalente.services.controller;
 import com.fernandovalente.services.helper.BookingTestHelper;
 import com.fernandovalente.services.helper.CustomerTestHelper;
 import com.fernandovalente.services.helper.StylistLifeCycleTestHelper;
-import com.fernandovalente.services.model.BatchBookingResult;
+import com.fernandovalente.services.dto.BatchBookingResult;
 import com.fernandovalente.services.model.Booking;
 import com.fernandovalente.services.model.Customer;
 import com.fernandovalente.services.model.Stylist;
+import com.fernandovalente.services.model.TimeSlot;
 import org.json.JSONArray;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +54,7 @@ public class StylistBookingBatchControllerTest {
         Stylist onlyStylist = stylistLifeCycleTestHelper.createStylist("Stylist 3");
 
         JSONArray requests = new JSONArray();
-        for(int slot = 0; slot < 16; slot ++) {
+        for(int slot = 0; slot < TimeSlot.MAX_TIME_SLOT_PER_DAY; slot ++) {
             requests.put(
                     bookingTestHelper.buildBookingRequestJson(LocalDate.now(), slot, customer.getId())
             );
@@ -68,11 +69,10 @@ public class StylistBookingBatchControllerTest {
         List<Booking> succeedBooking = responseEntity.getBody().getSucceedBookingRequests();
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getSucceedBookingRequests()).hasSize(16);
+        assertThat(responseEntity.getBody().getSucceedBookingRequests()).hasSize(TimeSlot.MAX_TIME_SLOT_PER_DAY);
         assertThat(responseEntity.getBody().getFailedBookingRequests()).hasSize(0);
         for (Booking booking : succeedBooking) {
             assertThat(booking.getStylist()).isEqualToComparingFieldByFieldRecursively(onlyStylist);
         }
-
     }
 }

@@ -1,8 +1,9 @@
 package com.fernandovalente.services.service;
 
-import com.fernandovalente.services.model.BatchBookingResult;
+import com.fernandovalente.services.dto.BatchBookingResult;
 import com.fernandovalente.services.model.Booking;
-import com.fernandovalente.services.model.BookingRequest;
+import com.fernandovalente.services.dto.BookingRequest;
+import com.fernandovalente.services.model.Stylist;
 import org.javatuples.Triplet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +13,20 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
-
+/**
+ * Service that deals with batch stylist calls bookings
+ */
 @Component
 public class BatchBookingService {
     private static final Logger LOG = LoggerFactory.getLogger(BookingService.class);
 
     @Autowired
     BookingService service;
-
+    /**
+     * Tries Books {@link List<BookingRequest>}
+     * @param bookingRequests request for booking a call
+     * @return {@link BatchBookingResult} result with failed request and succeeded ones
+     */
     public BatchBookingResult bookBatch(List<BookingRequest> bookingRequests) {
         return bookingRequests.stream().map((bookingRequest) -> {
             Booking booking = null;

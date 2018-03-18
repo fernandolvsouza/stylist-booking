@@ -1,7 +1,7 @@
 package com.fernandovalente.services.controller;
 
-import com.fernandovalente.services.model.BatchBookingResult;
-import com.fernandovalente.services.model.BookingRequest;
+import com.fernandovalente.services.dto.BatchBookingResult;
+import com.fernandovalente.services.dto.BookingRequest;
 import com.fernandovalente.services.service.BatchBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

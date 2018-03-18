@@ -1,9 +1,6 @@
 package com.fernandovalente.services.repository;
 
-import com.fernandovalente.services.model.Booking;
-import com.fernandovalente.services.model.Customer;
-import com.fernandovalente.services.model.Stylist;
-import com.fernandovalente.services.model.TimeSlot;
+import com.fernandovalente.services.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,7 @@ public class StylistRepositoryTest {
 
     @Test
     public void shouldReturnOneStylistIfThereIsOnlyOne() {
-        Stylist stylist = new Stylist("Only one");
+        Stylist stylist = new Stylist("Only one", StylistState.READY);
         stylistRepository.save(stylist);
 
         List<Stylist> availableStylists = stylistRepository.findStylistsWithoutTimeSlotBooked(LocalDate.now(), 0);
@@ -45,7 +42,7 @@ public class StylistRepositoryTest {
 
     @Test
     public void shouldReturnZeroStylistsIfTheyAreAllBooked() {
-        Stylist stylist = new Stylist("Only one");
+        Stylist stylist = new Stylist("Only one", StylistState.READY);
         stylistRepository.save(stylist);
 
         Customer customer = new Customer("Only one customer");
@@ -77,7 +74,7 @@ public class StylistRepositoryTest {
 
         int total = 10;
         for (int index = 0; index < total/2; index ++) {
-            Stylist stylist = new Stylist("Stylist " + index);
+            Stylist stylist = new Stylist("Stylist " + index, StylistState.READY);
             stylistRepository.save(stylist);
 
             Booking booking = new Booking(stylist, timeSlot, customer);
@@ -88,7 +85,7 @@ public class StylistRepositoryTest {
         }
 
         for (int index = total/2; index < total; index ++) {
-            Stylist stylist = new Stylist("Stylist " + index);
+            Stylist stylist = new Stylist("Stylist " + index, StylistState.READY);
             stylistRepository.save(stylist);
         }
 

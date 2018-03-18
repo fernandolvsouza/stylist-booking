@@ -16,6 +16,8 @@ public class Stylist {
 
     private String name;
 
+    private StylistState state;
+
     @OneToMany(mappedBy = "stylist")
     private List<Booking> bookings;
 
@@ -24,13 +26,19 @@ public class Stylist {
     }
 
     @JsonCreator
-    public Stylist(@NonNull @JsonProperty("name") String name) {
+    public Stylist(@NonNull @JsonProperty("name") String name, @NonNull @JsonProperty("state") StylistState state) {
         this.name = name;
+        this.state = state;
     }
 
     @NonNull
     public String getName() {
         return name;
+    }
+
+    @NonNull
+    public StylistState getState() {
+        return state;
     }
 
     @NonNull
@@ -69,5 +77,9 @@ public class Stylist {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public void setState(StylistState state) {
+        this.state = state;
     }
 }
