@@ -11,6 +11,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Customer {
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -31,6 +32,11 @@ public class Customer {
         return name;
     }
 
+    @NonNull
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,4 +51,5 @@ public class Customer {
     public int hashCode() {
         return name.hashCode();
     }
+
 }

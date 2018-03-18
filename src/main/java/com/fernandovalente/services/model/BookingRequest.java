@@ -8,22 +8,30 @@ import javax.validation.constraints.NotNull;
 
 public class BookingRequest {
     private TimeSlot timeSlot;
-    private Customer customer;
+    private Long customerId;
 
     @JsonCreator
     public BookingRequest(@NotNull @NotEmpty @JsonProperty("timeSlot") TimeSlot timeSlot,
-                          @NotNull @JsonProperty("customer") Customer customer) {
+                          @NotNull @JsonProperty("customerId") Long customerId) {
         this.timeSlot = timeSlot;
-        this.customer = customer;
+        this.customerId = customerId;
     }
 
     @NotNull
-    public Customer getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
     @NotNull
     public TimeSlot getTimeSlot() {
         return timeSlot;
+    }
+
+    @Override
+    public String toString() {
+        return "BookingRequest{" +
+                "timeSlot=" + timeSlot +
+                ", customer=" + customerId +
+                '}';
     }
 }

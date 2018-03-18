@@ -34,6 +34,11 @@ public class Booking {
     }
 
     @NonNull
+    public Long getId() {
+        return id;
+    }
+
+    @NonNull
     public Stylist getStylist() {
         return stylist;
     }
@@ -68,5 +73,15 @@ public class Booking {
         result = 31 * result + timeSlot.hashCode();
         result = 31 * result + customer.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "id=" + id +
+                ", stylist=" + stylist +
+                ", timeSlot=" + timeSlot +
+                ", customer=" + customer +
+                '}';
     }
 }

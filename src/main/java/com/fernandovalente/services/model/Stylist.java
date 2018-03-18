@@ -1,13 +1,12 @@
 package com.fernandovalente.services.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.lang.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Stylist {
@@ -17,7 +16,10 @@ public class Stylist {
 
     private String name;
 
-    // no args constructor required by JAP SPEC
+    @OneToMany(mappedBy = "stylist")
+    private List<Booking> bookings;
+
+    // no args constructor required by JPA SPEC
     protected Stylist() {
     }
 
@@ -29,6 +31,21 @@ public class Stylist {
     @NonNull
     public String getName() {
         return name;
+    }
+
+    @NonNull
+    public Long getId() {
+        return id;
+    }
+
+    @NonNull
+    @JsonIgnore
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     @Override
@@ -44,5 +61,13 @@ public class Stylist {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Stylist{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

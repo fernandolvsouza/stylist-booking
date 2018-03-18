@@ -9,10 +9,13 @@ import com.fernandovalente.services.repository.CustomerRepository;
 import com.fernandovalente.services.repository.TimeSlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Component
+@Transactional(readOnly = true)
 public class BookingService {
-
     private StylistAvailabilityService stylistAvailabilityService;
     private BookingRepository bookingRepository;
     private CustomerRepository customerRepository;
@@ -27,12 +30,23 @@ public class BookingService {
         this.timeSlotRepository = timeSlotRepository;
     }
 
-    public Booking book(Customer customer, TimeSlot timeSlot) {
+    @Transactional
+    public Booking book(Long customerId, TimeSlot timeSlot) {
+        Optional<Customer> persistedCustomer = customerRepository.findById(customerId);
+
+        if (!persistedCustomer.isPresent()) {
+            throw new IllegalArgumentException("CustomerId " + customerId + "does not exist ");
+        }
+
+        Optional<TimeSlot> persistedTimeSlot = timeSlotRepository.findByDayAndDaySlot(timeSlot.getDay(),
+                timeSlot.getDaySlot());
+        if (!persistedTimeSlot.isPresent()) {
+            timeSlotRepository.save(timeSlot);
+        }
+
+
         Stylist stylist = stylistAvailabilityService.findAvailableStylist(timeSlot);
-        timeSlotRepository.save(timeSlot);
-        customerRepository.save(customer);
-        // TODO avoid overbooking
-        Booking booking = new Booking(stylist, timeSlot, customer);
+        Booking booking = new Booking(stylist, timeSlot, persistedCustomer.get());
         return bookingRepository.save(booking);
     }
 

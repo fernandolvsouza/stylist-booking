@@ -5,14 +5,17 @@ import com.fernandovalente.services.model.TimeSlot;
 import com.fernandovalente.services.repository.StylistRepository;
 import com.fernandovalente.services.repository.TimeSlotRepository;
 import com.google.common.collect.Lists;
+import org.omg.SendingContext.RunTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional(readOnly = true)
 public class StylistAvailabilityService {
 
     private StylistRepository stylistRepository;
@@ -25,8 +28,12 @@ public class StylistAvailabilityService {
     }
 
     public Stylist findAvailableStylist(TimeSlot timeSlot) {
-        Stylist stylist = new Stylist("chosen stylist");
-        return stylistRepository.save(stylist);
+        List<Stylist> availableStylists = stylistRepository.findStylistsWithoutTimeSlotBooked(timeSlot.getDay(),
+                timeSlot.getDaySlot());
+        if (availableStylists.isEmpty()) {
+            throw new IllegalStateException("Could not found available stylist for slot" + timeSlot);
+        }
+        return availableStylists.get(0);
     }
 
     public List<TimeSlot> getAvailableTimeSlotsInBetweenDays(LocalDate fromInclusive, LocalDate fromExclusive) {
