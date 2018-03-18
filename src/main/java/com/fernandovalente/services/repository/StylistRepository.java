@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface StylistRepository extends CrudRepository<Stylist, Long> {
-    @Query("SELECT s FROM Stylist s WHERE s NOT IN (" +
+    @Query("SELECT s FROM Stylist s WHERE s.state = 1 AND s NOT IN (" +
             "SELECT s FROM Stylist s JOIN s.bookings b JOIN b.timeSlot t WHERE t.day = ?1 AND t.daySlot = ?2" +
             ")")
     List<Stylist> findStylistsWithoutTimeSlotBooked(LocalDate date, int daySlot);

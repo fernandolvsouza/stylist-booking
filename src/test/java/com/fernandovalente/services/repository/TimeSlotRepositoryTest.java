@@ -147,4 +147,43 @@ public class TimeSlotRepositoryTest {
         List<Object[]> totallyBooked = timeSlotRepository.findTimeSlotsTotallyBooked(from, to);
         assertThat(totallyBooked).hasSize(8);
     }
+
+    @Test
+    public void shouldNonReadyStylistShouldBeIgnored() {
+
+        LocalDate from = LocalDate.now();
+        LocalDate to = from;
+
+        Customer customer = new Customer("Only one customer");
+        customerRepository.save(customer);
+
+        Stylist firstStylist = new Stylist("first Stylist", StylistState.READY);
+        stylistRepository.save(firstStylist);
+
+        Stylist secondStylist = new Stylist("second Stylist", StylistState.SICK);
+        stylistRepository.save(secondStylist);
+
+        for (int slot = 0; slot < TimeSlot.MAX_TIME_SLOT_PER_DAY; slot++) {
+
+            TimeSlot timeSlot = new TimeSlot(slot, from);
+            timeSlotRepository.save(timeSlot);
+
+            Booking booking = new Booking(firstStylist, timeSlot, customer);
+            List<Booking> bookings = new ArrayList<>();
+            bookings.add(booking);
+            firstStylist.setBookings(bookings);
+            bookingRepository.save(booking);
+
+            if (slot < TimeSlot.MAX_TIME_SLOT_PER_DAY / 2) {
+                Booking secondBooking = new Booking(secondStylist, timeSlot, customer);
+                List<Booking> secondBookings = new ArrayList<>();
+                secondBookings.add(secondBooking);
+                secondStylist.setBookings(secondBookings);
+                bookingRepository.save(secondBooking);
+            }
+        }
+
+        List<Object[]> totallyBooked = timeSlotRepository.findTimeSlotsTotallyBooked(from, to);
+        assertThat(totallyBooked).hasSize(16);
+    }
 }
