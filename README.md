@@ -7,6 +7,8 @@ Service for booking meetings with amazing stylists
 * junit for tests
 
 ## Endpoints
+http://localhost:8080/swagger-ui.htm
+
 * POST /api/v1/customer
 * POST /api/v1/stylist
 * POST /api/v1/stylist/{stylistId}/ready
@@ -17,6 +19,8 @@ Service for booking meetings with amazing stylists
 * GET /api/v1/stylist-booking
 * POST /api/v1/stylist-booking-batch-task
 * GET /api/v1/stylist-availability
+
+
 
 ## Issues
 * Optmistic locking
