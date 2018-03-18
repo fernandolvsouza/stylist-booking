@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 public class Booking {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne

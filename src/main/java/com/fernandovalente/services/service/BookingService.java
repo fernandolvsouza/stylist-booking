@@ -38,14 +38,10 @@ public class BookingService {
             throw new IllegalArgumentException("CustomerId " + customerId + "does not exist ");
         }
 
-        Optional<TimeSlot> persistedTimeSlot = timeSlotRepository.findByDayAndDaySlot(timeSlot.getDay(),
-                timeSlot.getDaySlot());
-        if (!persistedTimeSlot.isPresent()) {
-            timeSlotRepository.save(timeSlot);
-        }
-
-
+        timeSlotRepository.save(timeSlot);
+        
         Stylist stylist = stylistAvailabilityService.findAvailableStylist(timeSlot);
+
         Booking booking = new Booking(stylist, timeSlot, persistedCustomer.get());
         return bookingRepository.save(booking);
     }

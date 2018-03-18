@@ -12,7 +12,7 @@ public class BatchBookingResult {
 
     @JsonCreator
     public BatchBookingResult(@JsonProperty("failedBookingRequests") List<BookingRequest> failedBookingRequests,
-                              @JsonProperty("succeedBookingRequests")List<Booking> succeedBookingRequests) {
+                              @JsonProperty("succeedBookingRequests") List<Booking> succeedBookingRequests) {
         this.failedBookingRequests = failedBookingRequests;
         this.succeedBookingRequests = succeedBookingRequests;
     }

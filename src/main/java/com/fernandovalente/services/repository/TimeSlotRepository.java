@@ -1,14 +1,16 @@
 package com.fernandovalente.services.repository;
 
 import com.fernandovalente.services.model.TimeSlot;
+import org.javatuples.Pair;
+import org.javatuples.Triplet;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 public interface TimeSlotRepository extends CrudRepository<TimeSlot, Long> {
-    Iterable<TimeSlot> findByDayBetween(LocalDate from, LocalDate to);
-    Optional<TimeSlot> findByDayAndDaySlot(LocalDate day, @Min(0) @Max(15) int daySlot);
+    @Query("SELECT t.day, t.daySlot FROM Stylist s JOIN s.bookings b JOIN b.timeSlot t WHERE t.day >= ?1 " +
+            "AND t.day <= ?2 GROUP BY t.day, t.daySlot HAVING count(s) >= (SELECT count(s) FROM Stylist s)")
+    List<Object[]> findTimeSlotsTotallyBooked(LocalDate fromInclusive, LocalDate toInclusive);
 }

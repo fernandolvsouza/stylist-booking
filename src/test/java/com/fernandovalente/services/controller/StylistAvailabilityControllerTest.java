@@ -38,6 +38,9 @@ public class StylistAvailabilityControllerTest {
     private CustomerTestHelper customerTestHelper;
     private StylistLifeCycleTestHelper stylistLifeCycleTestHelper;
 
+    private Stylist firstStylist;
+    private Stylist secondStylist;
+
     @Before
     public void before() {
         bookingTestHelper = new BookingTestHelper(port, restTemplate);
@@ -76,9 +79,9 @@ public class StylistAvailabilityControllerTest {
     }
 
     @Test
-    public void shouldReturn8SlotsWhen8AreBooked() throws JSONException {
+    public void shouldReturnAvailableSlotsProperly() throws JSONException {
         String today = "2018-03-17";
-        stylistLifeCycleTestHelper.createStylist("Stylist name");
+        firstStylist = stylistLifeCycleTestHelper.createStylist("first Stylist");
         Customer customer = customerTestHelper.createCustomer("Batch costumer");
         for (int index = 0; index < 8; index++) {
             bookingTestHelper.bookSlot(LocalDate.parse(today), index, customer.getId());
@@ -88,5 +91,13 @@ public class StylistAvailabilityControllerTest {
                 STYLIST_AVAILABILITY_PATH + "?fromInclusive="+ today + "&toInclusive="+ today, TimeSlot[].class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(entity.getBody()).hasSize(8);
+
+        secondStylist = stylistLifeCycleTestHelper.createStylist("second Stylist");
+
+        ResponseEntity<TimeSlot[]> secondsEntity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
+                STYLIST_AVAILABILITY_PATH + "?fromInclusive="+ today + "&toInclusive="+ today, TimeSlot[].class);
+        assertThat(secondsEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(secondsEntity.getBody()).hasSize(16);
+
     }
 }

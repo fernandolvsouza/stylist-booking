@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Stylist {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
