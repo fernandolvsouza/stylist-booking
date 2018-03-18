@@ -16,3 +16,10 @@ Service for booking meetings with amazing stylists
 * POST /api/v1/stylist-booking
 * GET /api/v1/stylist-booking
 * POST /api/v1/stylist-booking-batch-task
+* GET /api/v1/stylist-availability
+
+## Issues
+* Optmistic locking
+* More Javadocs
+* Consider only ready stylist in /api/v1/stylist-availability
+
