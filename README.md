@@ -7,7 +7,7 @@ Service for booking meetings with amazing stylists
 * junit for tests
 
 ## Endpoints
-http://localhost:8080/swagger-ui.htm
+http://localhost:8080/swagger-ui.html
 
 * POST /api/v1/customer
 * POST /api/v1/stylist
