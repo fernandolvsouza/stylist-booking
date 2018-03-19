@@ -42,7 +42,8 @@ public class StylistBookingControllerTest {
     public void before() {
         customerTestHelper = new CustomerTestHelper(port, restTemplate);
         StylistLifeCycleTestHelper stylistLifeCycleTestHelper = new StylistLifeCycleTestHelper(port, restTemplate);
-        stylistLifeCycleTestHelper.createStylist("Stylist name");
+        Stylist stylist = stylistLifeCycleTestHelper.createStylist("Stylist name");
+        stylistLifeCycleTestHelper.changeStylistState(stylist, StylistState.READY);
     }
 
     @Test

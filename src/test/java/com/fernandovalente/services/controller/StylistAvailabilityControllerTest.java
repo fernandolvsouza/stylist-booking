@@ -78,10 +78,11 @@ public class StylistAvailabilityControllerTest {
     @Test
     public void shouldReturnAvailableSlotsProperly() throws JSONException {
         final String today = "2018-03-17";
-        stylistLifeCycleTestHelper.createStylist("first Stylist");
+        Stylist stylist = stylistLifeCycleTestHelper.createStylist("first Stylist");
+        stylistLifeCycleTestHelper.changeStylistState(stylist, StylistState.READY);
         Customer customer = customerTestHelper.createCustomer("Batch costumer");
-        for (int index = 0; index < 8; index++) {
-            bookingTestHelper.bookSlot(LocalDate.parse(today), index, customer.getId());
+        for (int slot = 0; slot < 8; slot++) {
+            bookingTestHelper.bookSlot(LocalDate.parse(today), slot, customer.getId());
         }
 
         final ResponseEntity<TimeSlot[]> entity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
@@ -89,7 +90,8 @@ public class StylistAvailabilityControllerTest {
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(entity.getBody()).hasSize(TimeSlot.MAX_TIME_SLOT_PER_DAY / 2);
 
-        stylistLifeCycleTestHelper.createStylist("second Stylist");
+        Stylist secondStylist = stylistLifeCycleTestHelper.createStylist("second Stylist");
+        stylistLifeCycleTestHelper.changeStylistState(secondStylist, StylistState.READY);
 
         final ResponseEntity<TimeSlot[]> secondsEntity = this.restTemplate.getForEntity(BASE_TEST_URL + ":" + port +
                 STYLIST_AVAILABILITY_PATH + "?fromInclusive=" + today + "&toInclusive=" + today, TimeSlot[].class);
