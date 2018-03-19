@@ -22,8 +22,14 @@ http://localhost:8080/swagger-ui.html
 
 
 
-## Issues
-* Optmistic locking
+## Issues and Ideas
+* Optimistic locking when updating stylist state.
+* Create unique index for (stylist/Timelot) in booking, to avoid overbooking
+* Check if customer already has a booking
+* Create custom exception handler for display nice responses on restful api
+* Create test for verify that when one booking fails, it does not rollback the whole batch operation 
 * More Javadocs
-* Consider only ready stylist in /api/v1/stylist-availability
+* About sick and holiday notification, should be considered as planned unavailabilities.
+* Create separate service of stylist availability that would receive events when sick-note, holiday-notes, booking-notes were registered. This service would be able to calculate availability in time considering that all those events have a period as properties. Like: Stylist is available for next week, on Monday, at 3 pm? 
+
 
